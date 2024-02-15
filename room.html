@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Room</title>
+<style>
+    body {
+        color: white; /* Set text color to white */
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+</head>
+<body>
+<div class="bg-image"></div>
+<div class="container">
+    <h1>Room Details</h1> <!-- Heading -->
+
+    <div id="roomDetails">
+        <p>Room ID: <span id="roomId"></span></p>
+        <p>Player Name: <span id="playerName"></span></p>
+        <h2>Players in the Room</h2>
+        <ul id="playerList">
+            <!-- Player list will be dynamically populated here -->
+        </ul>
+    </div>
+</div>
+<script>
+    let playerName; // Global variable declaration
+
+    const socket = io('http://localhost:3000');
+
+    // Extract player name from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    playerName = urlParams.get('playerName');
+
+    // Function to host a room
+    function hostRoom(playerName) {
+        socket.emit('hostRoom', playerName);
+    }
+
+    // Call hostRoom function with the extracted player name
+    hostRoom(playerName);
+</script>
+
+</body>
+</html>

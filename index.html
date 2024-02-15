@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Game Lobby</title>
 <link rel="stylesheet" type="text/css" href="style.css">
-<script src="client.js" type="module"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
-<script src="ws.js" type="module"></script>
 </head>
 <body>
 
@@ -24,7 +22,7 @@
     <!-- Play Options Container -->
     <div id="playOptions">
         <!-- Host a Room Button -->
-        <button id="hostRoomButton" onclick="hostRoom()">Host a Room</button>
+        <button id="hostRoomButton" onclick="showNamePopup()">Host a Room</button>
         <!-- Join Friends Room Button -->
         <button id="joinRoomButton" onclick="showJoinRoomPopup()">Join Friends Room</button>
 
@@ -40,5 +38,142 @@
 
     </div>
 </div>
+
+<!-- Name Popup -->
+<div id="namePopup" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeNamePopup()">&times;</span>
+    <input type="text" id="playerNameHost" class="input-field" placeholder="Enter Your Name"><br>
+    <button onclick="hostRoomWithPopup()">Host</button>
+  </div>
+</div>
+
+<script>
+    let playerName = '';
+    // Function to show play options
+    function showPlayOptions() {
+        // Hide the initial buttons
+        document.getElementById("startGameButton").style.display = "none";
+        document.getElementById("playWithFriendsButton").style.display = "none";
+        // Show the play options container
+        document.getElementById("playOptions").style.display = "block";
+    }
+
+    // Function to start the game
+    function startGame() {
+        // Replace 'your_nodejs_api_url_for_start_game' with your actual API endpoint URL for starting the game
+        fetch('http://localhost:3000/startGame')
+            .then(response => {
+                // Handle response as needed
+                if (response.ok) {
+                    // Proceed to next page or handle response data
+                    window.location.href = 'next_page.html'; // Redirect to the next page
+                } else {
+                    throw new Error('Network response was not ok.');
+                }
+            })
+            .catch(error => {
+                console.error('Error starting game:', error);
+            });
+    }
+
+    // Function to join a friend's room
+    function joinRoom() {
+        var roomId = document.getElementById("roomIdInput").value;
+        var playerName = document.getElementById("playerNameInput").value;
+      
+        // Here you can perform any validation on the roomId and playerName
+      
+        // For demonstration, alert the entered values
+        // alert("Joining Room ID: " + roomId + "\nPlayer Name: " + playerName);
+      
+        // Close the modal after joining
+        closeJoinRoomPopup();
+
+        // Replace 'your_nodejs_api_url_for_join_room' with your actual API endpoint URL for joining a room
+        fetch('your_nodejs_api_url_for_join_room', {
+            method: 'POST', // Or 'GET', 'PUT', etc.
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any additional headers as needed
+            },
+            body: JSON.stringify({
+                roomId: roomId,
+                playerName: playerName
+            })
+        })
+        .then(response => {
+            // Handle response as needed
+            if (response.ok) {
+                // Proceed to next page or handle response data
+                window.location.href = 'next_page.html'; // Redirect to the next page
+            } else {
+                throw new Error('Network response was not ok.');
+            }
+        })
+        .catch(error => {
+            console.error('Error joining room:', error);
+        });
+    }
+
+    // Function to host a room
+    function hostRoom() {
+        // Show the name popup
+        document.getElementById('namePopup').style.display = 'block';
+    }
+
+    // Function to host a room with the name from the popup
+    function hostRoomWithPopup() {
+    playerName = document.getElementById("playerNameHost").value;
+
+    // Here you can perform any validation on the playerName
+
+    // Close the popup after entering the name
+    closeNamePopup();
+
+    // Emit the 'hostRoom' event with the playerName to the server
+    socket.emit('hostRoom', playerName);
+}
+
+    // Function to show join room popup
+    function showJoinRoomPopup() {
+      var modal = document.getElementById("joinRoomModal");
+      modal.style.display = "block";
+    }
+
+    // Function to close join room popup
+    function closeJoinRoomPopup() {
+      var modal = document.getElementById("joinRoomModal");
+      modal.style.display = "none";
+    }
+
+    // Function to show the name popup
+    function showNamePopup() {
+      var modal = document.getElementById("namePopup");
+      modal.style.display = "block";
+    }
+
+    // Function to close the name popup
+    function closeNamePopup() {
+      var modal = document.getElementById("namePopup");
+      modal.style.display = "none";
+    }
+
+    // Establish a connection to the server
+    const socket = io('http://localhost:3000'); // Change the URL to your server URL
+
+    // Event listener for hosting a room
+    document.getElementById('hostRoomButton').addEventListener('click', () => {
+        hostRoom(); // Show the name popup when the host room button is clicked
+    });
+
+    // Event listener for receiving the created room ID
+    socket.on('roomCreated', (data) => {
+    const { roomId, playerName } = data; // Extract roomId and playerName from the received data
+    window.location.href = `room.html?roomId=${roomId}&playerName=${playerName}`; // Redirect with both roomId and playerName
+});
+
+</script>
+
 </body>
 </html>
