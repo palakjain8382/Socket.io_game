@@ -4,56 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Game Lobby</title>
-<style>
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0;
-        height: 100vh;
-    }
-
-    .bg-image {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url('https://c0.wallpaperflare.com/preview/524/769/152/ace-blur-card-game-cards.jpg');
-        background-size: cover;
-        background-repeat: no-repeat;
-        filter: blur(5px);
-    }
-
-    .container {
-        position: relative;
-        z-index: 1;
-        text-align: center;
-    }
-
-    h1 {
-        color: #fff; /* White font color */
-        font-size: 32px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.7); /* Text shadow effect */
-    }
-
-    button {
-        margin: 10px;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-        background-color: #9ACD32; /* Pastel green */
-        border: 2px solid #556B2F; /* Dark olive green border */
-        border-radius: 5px;
-        color: #000; /* Black font color */
-        text-shadow: 1px 1px 1px #fff; /* White text shadow */
-        box-shadow: 2px 2px 5px rgba(0,0,0,0.5); /* Shadow effect */
-    }
-
-    #playOptions {
-        display: none; /* Initially hide play options */
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="main.js"></script>
 </head>
 <body>
 
@@ -61,85 +13,30 @@
 
 <div class="container">
     <h1>CARD GAME</h1> <!-- Heading -->
+    
+    <!-- Start Game Button -->
+    <button id="startGameButton" onclick="startGame()">Play with CPU</button>
     <!-- Play with Friends Button -->
     <button id="playWithFriendsButton" onclick="showPlayOptions()">Play with Friends</button>
 
-    <!-- Start Game Button -->
-    <button id="startGameButton" onclick="startGame()">Play with CPU</button>
-
     <!-- Play Options Container -->
     <div id="playOptions">
-        <!-- Join Friends Room Button -->
-        <button id="joinRoomButton" onclick="joinRoom()">Join Friends Room</button>
         <!-- Host a Room Button -->
         <button id="hostRoomButton" onclick="hostRoom()">Host a Room</button>
+        <!-- Join Friends Room Button -->
+        <button id="joinRoomButton" onclick="showJoinRoomPopup()">Join Friends Room</button>
+
+    <!-- The modal -->
+    <div id="joinRoomModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeJoinRoomPopup()">&times;</span>
+        <input type="text" id="roomIdInput" class="input-field" placeholder="Enter Room ID"><br>
+        <input type="text" id="playerNameInput" class="input-field" placeholder="Enter Your Name"><br>
+        <button onclick="joinRoom()">Join</button>
+    </div>
+    </div>
+
     </div>
 </div>
-
-<script>
-// Function to show play options
-function showPlayOptions() {
-    // Hide the initial buttons
-    document.getElementById("startGameButton").style.display = "none";
-    document.getElementById("playWithFriendsButton").style.display = "none";
-    // Show the play options container
-    document.getElementById("playOptions").style.display = "block";
-}
-
-// Function to start the game
-function startGame() {
-    // Replace 'your_nodejs_api_url_for_start_game' with your actual API endpoint URL for starting the game
-    fetch('http://localhost:3000/startGame')
-        .then(response => {
-            // Handle response as needed
-            if (response.ok) {
-                // Proceed to next page or handle response data
-                window.location.href = 'next_page.html'; // Redirect to the next page
-            } else {
-                throw new Error('Network response was not ok.');
-            }
-        })
-        .catch(error => {
-            console.error('Error starting game:', error);
-        });
-}
-
-// Function to join a friend's room
-function joinRoom() {
-    // Replace 'your_nodejs_api_url_for_join_room' with your actual API endpoint URL for joining a room
-    fetch('your_nodejs_api_url_for_join_room')
-        .then(response => {
-            // Handle response as needed
-            if (response.ok) {
-                // Proceed to next page or handle response data
-                window.location.href = 'next_page.html'; // Redirect to the next page
-            } else {
-                throw new Error('Network response was not ok.');
-            }
-        })
-        .catch(error => {
-            console.error('Error joining room:', error);
-        });
-}
-
-// Function to host a room
-function hostRoom() {
-    // Replace 'your_nodejs_api_url_for_host_room' with your actual API endpoint URL for hosting a room
-    fetch('your_nodejs_api_url_for_host_room')
-        .then(response => {
-            // Handle response as needed
-            if (response.ok) {
-                // Proceed to next page or handle response data
-                window.location.href = 'next_page.html'; // Redirect to the next page
-            } else {
-                throw new Error('Network response was not ok.');
-            }
-        })
-        .catch(error => {
-            console.error('Error hosting room:', error);
-        });
-}
-</script>
-
 </body>
 </html>
