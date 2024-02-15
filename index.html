@@ -49,7 +49,8 @@
 </div>
 
 <script>
-    let playerName = '';
+    let playerName = ''; // Initialize playerName with an empty string
+
     // Function to show play options
     function showPlayOptions() {
         // Hide the initial buttons
@@ -61,59 +62,29 @@
 
     // Function to start the game
     function startGame() {
-        // Replace 'your_nodejs_api_url_for_start_game' with your actual API endpoint URL for starting the game
-        fetch('http://localhost:3000/startGame')
-            .then(response => {
-                // Handle response as needed
-                if (response.ok) {
-                    // Proceed to next page or handle response data
-                    window.location.href = 'next_page.html'; // Redirect to the next page
-                } else {
-                    throw new Error('Network response was not ok.');
-                }
-            })
-            .catch(error => {
-                console.error('Error starting game:', error);
-            });
+        // Handle starting the game here...
+        // For example, redirect to the next page
+        window.location.href = 'startgame.html';
     }
 
     // Function to join a friend's room
     function joinRoom() {
         var roomId = document.getElementById("roomIdInput").value;
-        var playerName = document.getElementById("playerNameInput").value;
-      
+        var playerNameInput = document.getElementById("playerNameInput").value; // Use a different variable name to avoid conflict
+
+        // Set the playerName variable here
+        playerName = playerNameInput;
+
         // Here you can perform any validation on the roomId and playerName
-      
         // For demonstration, alert the entered values
         // alert("Joining Room ID: " + roomId + "\nPlayer Name: " + playerName);
       
         // Close the modal after joining
         closeJoinRoomPopup();
 
-        // Replace 'your_nodejs_api_url_for_join_room' with your actual API endpoint URL for joining a room
-        fetch('your_nodejs_api_url_for_join_room', {
-            method: 'POST', // Or 'GET', 'PUT', etc.
-            headers: {
-                'Content-Type': 'application/json',
-                // Add any additional headers as needed
-            },
-            body: JSON.stringify({
-                roomId: roomId,
-                playerName: playerName
-            })
-        })
-        .then(response => {
-            // Handle response as needed
-            if (response.ok) {
-                // Proceed to next page or handle response data
-                window.location.href = 'next_page.html'; // Redirect to the next page
-            } else {
-                throw new Error('Network response was not ok.');
-            }
-        })
-        .catch(error => {
-            console.error('Error joining room:', error);
-        });
+        // Handle joining the room here...
+        // For example, redirect to the next page
+        window.location.href = 'room.html';
     }
 
     // Function to host a room
@@ -124,39 +95,39 @@
 
     // Function to host a room with the name from the popup
     function hostRoomWithPopup() {
-    playerName = document.getElementById("playerNameHost").value;
+        playerName = document.getElementById("playerNameHost").value;
 
-    // Here you can perform any validation on the playerName
+        // Here you can perform any validation on the playerName
 
-    // Close the popup after entering the name
-    closeNamePopup();
+        // Close the popup after entering the name
+        closeNamePopup();
 
-    // Emit the 'hostRoom' event with the playerName to the server
-    socket.emit('hostRoom', playerName);
-}
+        // Emit the 'hostRoom' event with the playerName to the server
+        socket.emit('hostRoom', playerName);
+    }
 
     // Function to show join room popup
     function showJoinRoomPopup() {
-      var modal = document.getElementById("joinRoomModal");
-      modal.style.display = "block";
+        var modal = document.getElementById("joinRoomModal");
+        modal.style.display = "block";
     }
 
     // Function to close join room popup
     function closeJoinRoomPopup() {
-      var modal = document.getElementById("joinRoomModal");
-      modal.style.display = "none";
+        var modal = document.getElementById("joinRoomModal");
+        modal.style.display = "none";
     }
 
     // Function to show the name popup
     function showNamePopup() {
-      var modal = document.getElementById("namePopup");
-      modal.style.display = "block";
+        var modal = document.getElementById("namePopup");
+        modal.style.display = "block";
     }
 
     // Function to close the name popup
     function closeNamePopup() {
-      var modal = document.getElementById("namePopup");
-      modal.style.display = "none";
+        var modal = document.getElementById("namePopup");
+        modal.style.display = "none";
     }
 
     // Establish a connection to the server
@@ -167,10 +138,12 @@
         hostRoom(); // Show the name popup when the host room button is clicked
     });
 
-    // Event listener for receiving the created room ID
-    socket.on('roomCreated', (data) => {
+// Event listener for receiving the created room ID
+socket.on('roomCreated', (data) => {
+    console.log(data); // Check the contents of data
     const { roomId, playerName } = data; // Extract roomId and playerName from the received data
-    window.location.href = `room.html?roomId=${roomId}&playerName=${playerName}`; // Redirect with both roomId and playerName
+    const url = `room.html?roomId=${roomId}&playerName=${playerName}`; // Construct the URL with roomId and playerName parameters
+    window.location.href = url; // Redirect to the room.html page with parameters
 });
 
 </script>

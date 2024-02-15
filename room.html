@@ -28,11 +28,13 @@
 </div>
 <script>
     let playerName; // Global variable declaration
+    let roomId; // Global variable declaration
 
     const socket = io('http://localhost:3000');
 
-    // Extract player name from URL parameters
+    // Extract room ID and player name from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
+    roomId = urlParams.get('roomId');
     playerName = urlParams.get('playerName');
 
     // Function to host a room
@@ -40,8 +42,23 @@
         socket.emit('hostRoom', playerName);
     }
 
+    // Update room details on the screen
+    function updateRoomDetails() {
+        document.getElementById('roomId').textContent = roomId;
+        document.getElementById('playerName').textContent = playerName;
+    }
+
     // Call hostRoom function with the extracted player name
     hostRoom(playerName);
+
+    // Update room details when the room is created
+    socket.on('roomCreated', (data) => {
+        roomId = data.roomId;
+        updateRoomDetails();
+    });
+
+    // Update room details when the page loads
+    updateRoomDetails();
 </script>
 
 </body>

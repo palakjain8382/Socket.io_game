@@ -27,19 +27,22 @@ io.on('connection', (socket) => {
 
 // Host a new room
 socket.on('hostRoom', (playerName) => {
-  const roomId = generateRoomId(); // Room ID generated here
-  // console.log('Room created:', roomId); // Log the room ID to the console
-  const playerId = generatePlayerId();
-  socket.join(roomId);
-  // Initialize activeRooms[roomId] as an empty array if it's undefined
-  if (!activeRooms[roomId]) {
-      activeRooms[roomId] = [];
-  }
-  // Push player information into the room's array
-  activeRooms[roomId].push({ id: playerId, name: playerName }); // Assign the playerName here
-  // Emit 'roomCreated' event with roomId and playerId
-  socket.emit('roomCreated', { roomId, playerId }); // Emit to the specific socket
+    const roomId = generateRoomId(); // Room ID generated here
+    const playerId = generatePlayerId();
+    socket.join(roomId);
+    // Initialize activeRooms[roomId] as an empty array if it's undefined
+    if (!activeRooms[roomId]) {
+        activeRooms[roomId] = [];
+    }
+    // Push player information into the room's array
+    activeRooms[roomId].push({ id: playerId, name: playerName }); // Assign the playerName here
+    // Emit 'roomCreated' event with roomId and playerId
+    socket.emit('roomCreated', { roomId, playerId }); // Emit to the specific socket
+    
+    // Log the received data
+    console.log(`Room created: ${roomId}, Player name: ${playerName}`);
 });
+
 
 
     // Join a room
