@@ -37,19 +37,11 @@
     roomId = urlParams.get('roomId');
     playerName = urlParams.get('playerName');
 
-    // Function to host a room
-    function hostRoom(playerName) {
-        socket.emit('hostRoom', playerName);
-    }
-
     // Update room details on the screen
     function updateRoomDetails() {
         document.getElementById('roomId').textContent = roomId;
         document.getElementById('playerName').textContent = playerName;
     }
-
-    // Call hostRoom function with the extracted player name
-    hostRoom(playerName);
 
     // Update room details when the room is created
     socket.on('roomCreated', (data) => {
@@ -60,6 +52,7 @@
     // Update room details when the page loads
     updateRoomDetails();
 </script>
+
 
 </body>
 </html>

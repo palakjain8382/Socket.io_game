@@ -22,7 +22,7 @@
     <!-- Play Options Container -->
     <div id="playOptions">
         <!-- Host a Room Button -->
-        <button id="hostRoomButton" onclick="showNamePopup()">Host a Room</button>
+        <button id="hostRoomButton" onclick="hostRoom()">Host a Room</button>
         <!-- Join Friends Room Button -->
         <button id="joinRoomButton" onclick="showJoinRoomPopup()">Join Friends Room</button>
 
@@ -130,22 +130,19 @@
         modal.style.display = "none";
     }
 
+</script>
+
+<script>
     // Establish a connection to the server
     const socket = io('http://localhost:3000'); // Change the URL to your server URL
 
-    // Event listener for hosting a room
-    document.getElementById('hostRoomButton').addEventListener('click', () => {
-        hostRoom(); // Show the name popup when the host room button is clicked
+    // Event listener for receiving the created room ID
+    socket.on('roomCreated', (data) => {
+        console.log(data); // Check the contents of data
+        const { roomId, playerName } = data; // Extract roomId and playerName from the received data
+        const url = `room.html?roomId=${roomId}&playerName=${playerName}`; // Construct the URL with roomId and playerName parameters
+        window.location.href = url; // Redirect to the room.html page with parameters
     });
-
-// Event listener for receiving the created room ID
-socket.on('roomCreated', (data) => {
-    console.log(data); // Check the contents of data
-    const { roomId, playerName } = data; // Extract roomId and playerName from the received data
-    const url = `room.html?roomId=${roomId}&playerName=${playerName}`; // Construct the URL with roomId and playerName parameters
-    window.location.href = url; // Redirect to the room.html page with parameters
-});
-
 </script>
 
 </body>
