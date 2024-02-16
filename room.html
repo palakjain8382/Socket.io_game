@@ -19,9 +19,9 @@
 
     <div id="roomDetails">
         <p>Room ID: <span id="roomId"></span></p>
-        <p>Player Name: <span id="playerName"></span></p>
         <h2>Players in the Room</h2>
         <ul id="playerList">
+            <p><span id="playerName"></span></p>
             <!-- Player list will be dynamically populated here -->
         </ul>
     </div>
@@ -36,12 +36,42 @@
     const urlParams = new URLSearchParams(window.location.search);
     roomId = urlParams.get('roomId');
     playerName = urlParams.get('playerName');
+    document.createElement('li').textContent = playerName;
 
     // Update room details on the screen
     function updateRoomDetails() {
         document.getElementById('roomId').textContent = roomId;
         document.getElementById('playerName').textContent = playerName;
     }
+
+    // Function to update player list on the screen
+    function updatePlayerList(player) {
+        const playerListElement = document.getElementById('playerList');
+        const listItem = document.createElement('li');
+        listItem.textContent = player.name; // Assuming player has a name property
+        playerListElement.appendChild(listItem);
+    }
+
+    // Listen for updatePlayerList event
+    socket.on('updatePlayerList', ({ roomId, playerName }) => {
+        // Update the player list on the client page
+        // For example, append playerName to the player list UI
+        updatePlayerList({ name: playerName });
+        console.log('Updated player list:', playerName);
+    });
+
+    // Listen for roomDetails event
+socket.on('roomDetails', ({ roomId, playerName }) => {
+    // Update URL parameters
+    const queryParams = new URLSearchParams(window.location.search);
+    queryParams.set('roomId', roomId);
+    queryParams.set('playerName', playerName);
+    const newUrl = `${window.location.origin}${window.location.pathname}?${queryParams.toString()}`;
+    window.history.pushState({ path: newUrl }, '', newUrl);
+
+    // Update room details on the screen
+    updateRoomDetails();
+});
 
     // Update room details when the room is created
     socket.on('roomCreated', (data) => {
@@ -52,7 +82,5 @@
     // Update room details when the page loads
     updateRoomDetails();
 </script>
-
-
 </body>
 </html>
