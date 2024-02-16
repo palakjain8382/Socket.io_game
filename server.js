@@ -74,6 +74,8 @@ socket.on('joinRoom', ({ roomId, playerName }) => {
     // Emit 'roomJoined' event to the specific socket with room details
     socket.emit('roomJoined', { roomId, playerName });
 
+     // Emit updated player list to the client who just joined
+     socket.emit('updatePlayerList', { roomId, players: activeRooms[roomId] });
     // Log the player joining the room
     console.log('Player', playerName, 'joined Room', roomId);
 
@@ -82,26 +84,31 @@ socket.on('joinRoom', ({ roomId, playerName }) => {
 
     // Emit updated player list to all clients in the room after adding the player
     io.to(roomId).emit('updatePlayerList', { roomId, players: activeRooms[roomId] });
+
+    // Log the player list after updating
+    consolePlayerList();
 });
 
 
-    // Remove player from active rooms when disconnected
-    socket.on('disconnect', () => {
-        removePlayer(socket.id);
-        consolePlayerList();
-    });
 
     // Remove player from active rooms when disconnected
-    function removePlayer(socketId) {
-        for (const roomId in activeRooms) {
-            const index = activeRooms[roomId].findIndex(player => player.playerId === socketId);
-            if (index !== -1) {
-                activeRooms[roomId].splice(index, 1);
-                io.to(roomId).emit('updatePlayerList', { roomId, players: activeRooms[roomId] });
-                break;
-            }
-        }
-    }
+    // socket.on('disconnect', () => {
+    //     removePlayer(socket.id);
+    //     consolePlayerList();
+    // });
+
+// Remove player from active rooms when disconnected
+// function removePlayer(socketId) {
+//     for (const roomId in activeRooms) {
+//         const index = activeRooms[roomId].findIndex(player => player.playerId === socketId);
+//         if (index !== -1) {
+//             const removedPlayer = activeRooms[roomId].splice(index, 1)[0];
+//             io.to(roomId).emit('updatePlayerList', { roomId, players: activeRooms[roomId] });
+//             console.log(`Player ${removedPlayer.playerName} disconnected from Room ${roomId}`);
+//             break;
+//         }
+//     }
+// }
 
     // Generate a random room ID
     function generateRoomId() {

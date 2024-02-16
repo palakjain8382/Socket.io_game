@@ -1,3 +1,4 @@
+<!--room.html-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +22,6 @@
         <p>Room ID: <span id="roomId"></span></p>
         <h2>Players in the Room</h2>
         <ul id="playerList">
-            <p><span id="playerName"></span></p>
             <!-- Player list will be dynamically populated here -->
         </ul>
     </div>
@@ -36,53 +36,56 @@
     const urlParams = new URLSearchParams(window.location.search);
     roomId = urlParams.get('roomId');
     playerName = urlParams.get('playerName');
-    document.createElement('li').textContent = playerName;
+
+    // Function to send room ID and player name to the server
+    function sendRoomDetailsToServer() {
+        console.log("Sending room details to server: ", { roomId, playerName });
+        socket.emit('joinRoom', { roomId, playerName });
+    }
 
     // Update room details on the screen
     function updateRoomDetails() {
+        console.log("Updating room details on the screen");
         document.getElementById('roomId').textContent = roomId;
-        document.getElementById('playerName').textContent = playerName;
     }
 
     // Function to update player list on the screen
     function updatePlayerList(players) {
-        console.log('Updated player list:', players);
-
+        console.log("Updating player list on the screen with players: ", players);
         const playerListElement = document.getElementById('playerList');
-        const listItem = document.createElement('li');
-        listItem.textContent = player.name; // Assuming player has a name property
-        playerListElement.appendChild(listItem);
+        // Clear existing player list
+        playerListElement.innerHTML = '';
+
+        // Append each player's name to the list
+        players.forEach(player => {
+            const listItem = document.createElement('li');
+            listItem.textContent = player.playerName;
+            playerListElement.appendChild(listItem);
+        });
     }
 
     // Listen for updatePlayerList event
-    socket.on('updatePlayerList', ({ roomId, playerName }) => {
+    socket.on('updatePlayerList', ({ roomId, players }) => {
+        console.log("updatePlayerList event received with players: ", { roomId, players });
         // Update the player list on the client page
-        // For example, append playerName to the player list UI
-        updatePlayerList({ name: playerName });
-        console.log('Updated player list:', playerName);
+        updatePlayerList(players);
     });
 
     // Listen for roomDetails event
-socket.on('roomDetails', ({ roomId, playerName }) => {
-    // Update URL parameters
-    const queryParams = new URLSearchParams(window.location.search);
-    queryParams.set('roomId', roomId);
-    queryParams.set('playerName', playerName);
-    const newUrl = `${window.location.origin}${window.location.pathname}?${queryParams.toString()}`;
-    window.history.pushState({ path: newUrl }, '', newUrl);
+    socket.on('roomDetails', ({ roomId }) => {
+        console.log("roomDetails event received with roomId: ", roomId);
 
-    // Update room details on the screen
-    updateRoomDetails();
-});
-
-    // Update room details when the room is created
-    socket.on('roomCreated', (data) => {
-        roomId = data.roomId;
+        // Update room details on the screen
         updateRoomDetails();
+        // Send room details to the server
+        sendRoomDetailsToServer();
     });
 
     // Update room details when the page loads
     updateRoomDetails();
+
+    console.log("hello : ");
 </script>
+
 </body>
 </html>
