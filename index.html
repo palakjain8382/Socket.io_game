@@ -48,110 +48,130 @@
   </div>
 </div>
 
-<script >
+<script>
     let playerName = ''; // Initialize playerName with an empty string
 
-// Function to show play options
-function showPlayOptions() {
-    // Hide the initial buttons
-    document.getElementById("startGameButton").style.display = "none";
-    document.getElementById("playWithFriendsButton").style.display = "none";
-    // Show the play options container
-    document.getElementById("playOptions").style.display = "block";
-}
+    // Function to show play options
+    function showPlayOptions() {
+        // Hide the initial buttons
+        document.getElementById("startGameButton").style.display = "none";
+        document.getElementById("playWithFriendsButton").style.display = "none";
+        // Show the play options container
+        document.getElementById("playOptions").style.display = "block";
+    }
 
-// Function to start the game
-function startGame() {
-    // Handle starting the game here...
-    // For example, redirect to the next page
-    window.location.href = 'startgame.html';
-}
+    // Function to start the game
+    function startGame() {
+        // Handle starting the game here...
+        // For example, redirect to the next page
+        window.location.href = 'startgame.html';
+    }
 
-// Function to join a friend's room
-function joinRoom() {
-    var roomId = document.getElementById("roomIdInput").value;
-    var playerNameInput = document.getElementById("playerNameInput").value; // Use a different variable name to avoid conflict
+    // Function to join a friend's room
+    function joinRoom() {
+        var roomId = document.getElementById("roomIdInput").value;
+        var playerNameInput = document.getElementById("playerNameInput").value; // Use a different variable name to avoid conflict
 
-    // Set the playerName variable here
-    playerName = playerNameInput;
+        // Set the playerName variable here
+        playerName = playerNameInput;
 
-    // Here you can perform any validation on the roomId and playerName
-    // For demonstration, alert the entered values
-    // alert("Joining Room ID: " + roomId + "\nPlayer Name: " + playerName);
-  
-    // Close the modal after joining
-    closeJoinRoomPopup();
+        // Here you can perform any validation on the roomId and playerName
+        // For demonstration, alert the entered values
+        // alert("Joining Room ID: " + roomId + "\nPlayer Name: " + playerName);
+      
+        // Close the modal after joining
+        closeJoinRoomPopup();
 
+        // Emit the 'joinRoom' event with roomId and playerName to the server
+        socket.emit('joinRoom', { roomId, playerName });
 
-    socket.emit('joinRoom', { roomId, playerName });
+        // Handle joining the room here...
+        // For example, redirect to the next page
+        const url = `room.html?roomId=${roomId}&playerName=${playerName}`; // Construct the URL with roomId and playerName parameters
+        window.location.href = url; // Redirect to the room.html page with parameters
+    }
 
-    // Handle joining the room here...
-    // For example, redirect to the next page
-    const url = `room.html?roomId=${roomId}&playerName=${playerName}`; // Construct the URL with roomId and playerName parameters
-    window.location.href = url; // Redirect to the room.html page with parameters
-}
+    // Function to host a room
+    function hostRoom() {
+        // Show the name popup
+        document.getElementById('namePopup').style.display = 'block';
+    }
 
-// Function to host a room
-function hostRoom() {
-    // Show the name popup
-    document.getElementById('namePopup').style.display = 'block';
-}
+    // Function to host a room with the name from the popup
+    function hostRoomWithPopup() {
+        playerName = document.getElementById("playerNameHost").value;
 
-// Function to host a room with the name from the popup
-function hostRoomWithPopup() {
-    playerName = document.getElementById("playerNameHost").value;
+        // Here you can perform any validation on the playerName
 
-    // Here you can perform any validation on the playerName
+        // Close the popup after entering the name
+        closeNamePopup();
 
-    // Close the popup after entering the name
-    closeNamePopup();
+        // Emit the 'hostRoom' event with the playerName to the server
+        socket.emit('hostRoom', playerName);
+    }
 
-    // Emit the 'hostRoom' event with the playerName to the server
-    socket.emit('hostRoom', playerName);
-}
+    // Function to show join room popup
+    function showJoinRoomPopup() {
+        var modal = document.getElementById("joinRoomModal");
+        modal.style.display = "block";
+    }
 
-// Function to show join room popup
-function showJoinRoomPopup() {
-    var modal = document.getElementById("joinRoomModal");
-    modal.style.display = "block";
-}
+    // Function to close join room popup
+    function closeJoinRoomPopup() {
+        var modal = document.getElementById("joinRoomModal");
+        modal.style.display = "none";
+    }
 
-// Function to close join room popup
-function closeJoinRoomPopup() {
-    var modal = document.getElementById("joinRoomModal");
-    modal.style.display = "none";
-}
+    // Function to show the name popup
+    function showNamePopup() {
+        var modal = document.getElementById("namePopup");
+        modal.style.display = "block";
+    }
 
-// Function to show the name popup
-function showNamePopup() {
-    var modal = document.getElementById("namePopup");
-    modal.style.display = "block";
-}
+    // Function to close the name popup
+    function closeNamePopup() {
+        var modal = document.getElementById("namePopup");
+        modal.style.display = "none";
+    }
 
-// Function to close the name popup
-function closeNamePopup() {
-    var modal = document.getElementById("namePopup");
-    modal.style.display = "none";
-}
+    // Establish a connection to the server
+    const socket = io('http://localhost:3000'); // Change the URL to your server URL
 
-// Establish a connection to the server
-const socket = io('http://localhost:3000'); // Change the URL to your server URL
+    // Event listener for receiving the joined room details
+    socket.on('roomJoined', (data) => {
+        console.log(data); // Check the contents of data
+        const { roomId, playerName } = data; // Extract roomId and playerName from the received data
+        const url = `room.html?roomId=${roomId}&playerName=${playerName}`; // Construct the URL with roomId and playerName parameters
+        window.location.href = url; // Redirect to the room.html page with parameters
+    });
 
-// Event listener for receiving the joined room details
-socket.on('roomJoined', (data) => {
-    console.log(data); // Check the contents of data
-    const { roomId, playerName } = data; // Extract roomId and playerName from the received data
-    const url = `room.html?roomId=${roomId}&playerName=${playerName}`; // Construct the URL with roomId and playerName parameters
-    window.location.href = url; // Redirect to the room.html page with parameters
-});
+    // Event listener for receiving the created room ID
+    socket.on('roomCreated', (data) => {
+        console.log(data); // Check the contents of data
+        const { roomId, playerName } = data; // Extract roomId and playerName from the received data
+        const url = `room.html?roomId=${roomId}&playerName=${playerName}`; // Construct the URL with roomId and playerName parameters
+        window.location.href = url; // Redirect to the room.html page with parameters
+    });
 
-// Event listener for receiving the created room ID
-socket.on('roomCreated', (data) => {
-    console.log(data); // Check the contents of data
-    const { roomId, playerName } = data; // Extract roomId and playerName from the received data
-    const url = `room.html?roomId=${roomId}&playerName=${playerName}`; // Construct the URL with roomId and playerName parameters
-    window.location.href = url; // Redirect to the room.html page with parameters
-});
+    // Function to update player list on the screen
+    function updatePlayerList(players) {
+        console.log('Updated player list:', players);
+
+        const playerListElement = document.getElementById('playerList');
+        playerListElement.innerHTML = ''; // Clear previous player list
+
+        players.forEach(player => {
+            const listItem = document.createElement('li');
+            listItem.textContent = player.name; // Assuming player has a name property
+            playerListElement.appendChild(listItem);
+        });
+    }
+
+    // Listen for updatePlayerList event
+    socket.on('updatePlayerList', (players) => {
+        // Update the player list on the client page
+        updatePlayerList(players);
+    });
 
 </script>
 </body>

@@ -40,46 +40,64 @@ io.on('connection', (socket) => {
         if (!activeRooms[roomId]) {
             activeRooms[roomId] = [];
         }
+
+        // Add the host player to the active room
+        activeRooms[roomId].push({ playerId, playerName });
+
         // Emit 'roomCreated' event with roomId and playerId
-        socket.emit('roomCreated', { roomId, playerId, playerName }); // Emit to the specific socket
-        activeRooms[roomId].push({ id: playerId, name: playerName }); // Add host to the player list
-        io.to(roomId).emit('updatePlayerList', activeRooms[roomId]); // Emit updated player list to all clients in the room
+        socket.emit('roomCreated', { roomId, playerId, playerName });
+
+        // Emit updated player list to all clients in the room
+        io.to(roomId).emit('updatePlayerList', { roomId, players: activeRooms[roomId] });
+        consolePlayerList();
 
         // Log the received data
         console.log(`Room created: ${roomId}, Player name: ${playerName}`);
     });
 
-// Emit the room details to the client after a player joins the room
+// Join a room
 socket.on('joinRoom', ({ roomId, playerName }) => {
     socket.join(roomId);
     const playerId = generatePlayerId();
+    
+    // If the room doesn't exist, create it
     if (!activeRooms[roomId]) {
         activeRooms[roomId] = [];
     }
-    // Emit 'roomJoined' event to the specific socket with room details
-    socket.emit('roomJoined', { roomId, playerName });
-    
-    activeRooms[roomId].push({ id: playerId, name: playerName }); // Add joined player to the player list
-    console.log('Player', playerName, 'joined Room', roomId);
-    io.to(roomId).emit('updatePlayerList', activeRooms[roomId]); // Emit updated player list to all clients in the room
+
+    // Add the joined player to the active room
+    activeRooms[roomId].push({ playerId, playerName });
 
     // Emit room ID and player name back to the client
     socket.emit('roomDetails', { roomId, playerName });
+
+    // Emit 'roomJoined' event to the specific socket with room details
+    socket.emit('roomJoined', { roomId, playerName });
+
+    // Log the player joining the room
+    console.log('Player', playerName, 'joined Room', roomId);
+
+    // Log the updated player list
+    console.log('Updated Player List for Room', roomId, ':', activeRooms[roomId]);
+
+    // Emit updated player list to all clients in the room after adding the player
+    io.to(roomId).emit('updatePlayerList', { roomId, players: activeRooms[roomId] });
 });
 
 
     // Remove player from active rooms when disconnected
     socket.on('disconnect', () => {
         removePlayer(socket.id);
+        consolePlayerList();
     });
 
     // Remove player from active rooms when disconnected
     function removePlayer(socketId) {
         for (const roomId in activeRooms) {
-            const index = activeRooms[roomId].findIndex(player => player.id === socketId);
+            const index = activeRooms[roomId].findIndex(player => player.playerId === socketId);
             if (index !== -1) {
                 activeRooms[roomId].splice(index, 1);
-                io.to(roomId).emit('updatePlayerList', activeRooms[roomId]); // Emit updated player list to all clients in the room
+                io.to(roomId).emit('updatePlayerList', { roomId, players: activeRooms[roomId] });
                 break;
             }
         }
@@ -92,9 +110,24 @@ socket.on('joinRoom', ({ roomId, playerName }) => {
 
     // Generate a random player ID
     function generatePlayerId() {
-        return Math.random().toString(36).substring(2, 8);
+        return socket.id; // You can use the socket ID as the player ID
     }
 });
+
+
+function consolePlayerList(){
+    // Log list of all players
+console.log('List of all players:');
+for (const roomId in activeRooms) {
+    console.log(`Room: ${roomId}`);
+    console.log('Players:');
+    activeRooms[roomId].forEach(player => {
+        console.log(`Player ID: ${player.playerId}, Player Name: ${player.playerName}`);
+    });
+    console.log(" -- ", activeRooms[roomId])
+}
+
+}
 
 // Start the server
 server.listen(PORT, () => {

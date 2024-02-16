@@ -45,7 +45,9 @@
     }
 
     // Function to update player list on the screen
-    function updatePlayerList(player) {
+    function updatePlayerList(players) {
+        console.log('Updated player list:', players);
+
         const playerListElement = document.getElementById('playerList');
         const listItem = document.createElement('li');
         listItem.textContent = player.name; // Assuming player has a name property
