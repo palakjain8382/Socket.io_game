@@ -91,6 +91,7 @@
         window.location.href = url; // Redirect to the room.html page with parameters
     }
 
+
     // Function to host a room
     function hostRoom() {
         // Show the name popup
@@ -139,7 +140,6 @@
 
     // Event listener for receiving the joined room details
     socket.on('roomJoined', (data) => {
-        console.log(data); // Check the contents of data
         const { roomId, playerName } = data; // Extract roomId and playerName from the received data
         const url = `room.html?roomId=${roomId}&playerName=${playerName}`; // Construct the URL with roomId and playerName parameters
         window.location.href = url; // Redirect to the room.html page with parameters
@@ -147,32 +147,10 @@
 
     // Event listener for receiving the created room ID
     socket.on('roomCreated', (data) => {
-        console.log(data); // Check the contents of data
         const { roomId, playerName } = data; // Extract roomId and playerName from the received data
         const url = `room.html?roomId=${roomId}&playerName=${playerName}`; // Construct the URL with roomId and playerName parameters
         window.location.href = url; // Redirect to the room.html page with parameters
     });
-
-    // Function to update player list on the screen
-    function updatePlayerList(players) {
-        console.log('Updated player list:', players);
-
-        const playerListElement = document.getElementById('playerList');
-        playerListElement.innerHTML = ''; // Clear previous player list
-
-        players.forEach(player => {
-            const listItem = document.createElement('li');
-            listItem.textContent = player.name; // Assuming player has a name property
-            playerListElement.appendChild(listItem);
-        });
-    }
-
-    // Listen for updatePlayerList event
-    socket.on('updatePlayerList', (players) => {
-        // Update the player list on the client page
-        updatePlayerList(players);
-    });
-
 </script>
 </body>
 </html>

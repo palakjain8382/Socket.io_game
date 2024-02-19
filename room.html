@@ -1,17 +1,17 @@
-<!--room.html-->
+room.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Room</title>
-<style>
-    body {
-        color: white; /* Set text color to white */
-    }
-</style>
-<link rel="stylesheet" type="text/css" href="style.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Room</title>
+    <style>
+        body {
+            color: white; /* Set text color to white */
+        }
+    </style>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
 </head>
 <body>
 <div class="bg-image"></div>
@@ -27,65 +27,41 @@
     </div>
 </div>
 <script>
-    let playerName; // Global variable declaration
-    let roomId; // Global variable declaration
-
     const socket = io('http://localhost:3000');
 
-    // Extract room ID and player name from URL parameters
+    // Extract room ID from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
-    roomId = urlParams.get('roomId');
-    playerName = urlParams.get('playerName');
-
-    // Function to send room ID and player name to the server
-    function sendRoomDetailsToServer() {
-        console.log("Sending room details to server: ", { roomId, playerName });
-        socket.emit('joinRoom', { roomId, playerName });
-    }
+    const roomId = urlParams.get('roomId');
 
     // Update room details on the screen
-    function updateRoomDetails() {
-        console.log("Updating room details on the screen");
-        document.getElementById('roomId').textContent = roomId;
-    }
+    document.getElementById('roomId').textContent = roomId;
 
     // Function to update player list on the screen
     function updatePlayerList(players) {
-        console.log("Updating player list on the screen with players: ", players);
         const playerListElement = document.getElementById('playerList');
+
         // Clear existing player list
         playerListElement.innerHTML = '';
 
-        // Append each player's name to the list
+        // Append each player's name to the list if playerName is defined
         players.forEach(player => {
-            const listItem = document.createElement('li');
-            listItem.textContent = player.playerName;
-            playerListElement.appendChild(listItem);
+            if (player.playerName !== undefined) { // Check if playerName is defined
+                const listItem = document.createElement('li');
+                listItem.textContent = player.playerName;
+                playerListElement.appendChild(listItem);
+            }
         });
     }
 
     // Listen for updatePlayerList event
-    socket.on('updatePlayerList', ({ roomId, players }) => {
-        console.log("updatePlayerList event received with players: ", { roomId, players });
+    socket.on('updatePlayerList', (data) => {
         // Update the player list on the client page
-        updatePlayerList(players);
+        updatePlayerList(data);
     });
 
-    // Listen for roomDetails event
-    socket.on('roomDetails', ({ roomId }) => {
-        console.log("roomDetails event received with roomId: ", roomId);
+    // Emit joinRoom event when the page loads
+    socket.emit('joinRoom', { roomId });
 
-        // Update room details on the screen
-        updateRoomDetails();
-        // Send room details to the server
-        sendRoomDetailsToServer();
-    });
-
-    // Update room details when the page loads
-    updateRoomDetails();
-
-    console.log("hello : ");
 </script>
-
 </body>
 </html>
