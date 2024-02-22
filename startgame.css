@@ -114,3 +114,55 @@ body {
 .player-list ul li {
     margin-bottom: 10px;
 }
+
+.card-block {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+}
+
+.card {
+    width: 100px; /* Adjust size as needed */
+    height: auto;
+    margin: 0 10px; /* Adjust spacing between cards */
+}
+
+#start-game-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #9ACD32; /* Pastel green */
+    border: 2px solid #556B2F; /* Dark olive green border */
+    border-radius: 5px;
+    color: #000; /* Black font color */
+    text-shadow: 1px 1px 1px #fff; /* White text shadow */
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5); /* Shadow effect */
+    z-index: 3; /* Ensure button is on top */
+}
+
+.block-right,
+.block-left {
+    position: absolute;
+    width: 160px; /* Adjust width of the block area */
+    height: 100px; /* Adjust height of the block area */
+    background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent black background */
+}
+
+.block-right {
+    right: -120%; /* Adjust distance from the user */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.block-left {
+    /* left: -60px;  */
+    top: 50%;
+    left: -120%;
+    transform: translateY(-50%);
+}
