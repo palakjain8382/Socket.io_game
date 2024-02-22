@@ -1,0 +1,116 @@
+/* startgame.css */
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden; /* Prevent scrolling */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Make body a relative positioning context */
+}
+
+.bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/Wooden-bg.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: blur(1px);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%; /* Adjusted to take up 80% of the screen */
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Ensure the container is behind the player list */
+}
+
+.table-container {
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
+
+#table {
+    width: 100%;
+}
+
+.user {
+    position: absolute;
+    width: 140px; /* Adjusted to match the width of the icon */
+    height: 140px; /* Adjusted to match the height of the icon */
+}
+
+.user.user1 {
+    top: 10%;
+    left: 10%;
+    background-image: url('assets/user1.png');
+    background-size: auto; /* Set background size to auto */
+}
+
+.user.user2 {
+    top: 10%;
+    right: 10%;
+    background-image: url('assets/user2.png');
+    background-size: auto; /* Set background size to auto */
+}
+
+.user.user3 {
+    bottom: 10%;
+    left: 10%;
+    background-image: url('assets/user3.png');
+    background-size: auto; /* Set background size to auto */
+}
+
+.user.user4 {
+    bottom: 10%;
+    right: 10%;
+    background-image: url('assets/user4.png');
+    background-size: auto; /* Set background size to auto */
+}
+
+.user-name {
+    position: absolute;
+    bottom: -30px; /* Adjust the distance from the user icon */
+    left: 50%; /* Center the user name */
+    transform: translateX(-50%);
+    font-size: 14px; /* Adjust the font size */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    padding: 5px 10px; /* Adjust padding as needed */
+    color: white;
+    border-radius: 5px; /* Rounded corners */
+}
+
+.player-list {
+    width: 20%; /* Adjusted to take up 20% of the screen */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+    z-index: 2; /* Ensure the player list is on top */
+}
+
+.player-list h2 {
+    margin-top: 0;
+}
+
+.player-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.player-list ul li {
+    margin-bottom: 10px;
+}
