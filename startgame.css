@@ -89,6 +89,24 @@ body {
     border-radius: 5px; /* Rounded corners */
 }
 
+/* Add this CSS to style the input fields and send icons */
+.player-input {
+    width: 100px; /* Adjust width as needed */
+    padding: 10px; /* Adjust padding as needed */
+    border: 1px solid #ccc; /* Add border */
+    border-radius: 5px; /* Add border-radius */
+}
+
+.send-icon {
+    width: 80px; /* Adjust icon size as needed */
+    height: 30px; /* Adjust icon size as needed */
+    background-image: url('assets/send-icon.png'); /* Add send icon */
+    background-size: cover; /* Ensure icon covers the element */
+    cursor: pointer; /* Add cursor pointer */
+    margin-left: calc(100% - 80px); /* Adjusted position to 10px from the right */
+}
+
+
 .player-list {
     width: 20%; /* Adjusted to take up 20% of the screen */
     padding: 20px;
@@ -121,12 +139,30 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
+    justify-content: center; /* Center the cards horizontally */
+    align-items: center; /* Center the cards vertically */
 }
 
 .card {
-    width: 100px; /* Adjust size as needed */
-    height: auto;
-    margin: 0 10px; /* Adjust spacing between cards */
+    width: 60px; /* Adjust size as needed */
+    height: 80px; /* Adjust size as needed */
+    margin: 0 5px; /* Adjust spacing between cards */
+    background-size: cover; /* Ensure the card image covers the entire card element */
+    background-repeat: no-repeat; /* Prevent repeating the card image */
+}
+
+#end-game-btn {
+    position: absolute;
+    top: 0;
+    right: 50px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #e94b2f; /* Tomato color */
+    border: 2px solid #CD5C5C; /* Indian red border */
+    border-radius: 5px;
+    color: #fff; /* White font color */
+    z-index: 4; /* Ensure button is on top */
 }
 
 #start-game-btn {
@@ -146,23 +182,23 @@ body {
     z-index: 3; /* Ensure button is on top */
 }
 
+
 .block-right,
 .block-left {
     position: absolute;
-    width: 160px; /* Adjust width of the block area */
-    height: 100px; /* Adjust height of the block area */
-    background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent black background */
+    width: 160px; 
+    height: 100px;
+    /* background-color: rgba(0, 0, 0, 0.3);  */
 }
 
 .block-right {
-    right: -120%; /* Adjust distance from the user */
+    right: -120%;
     top: 50%;
     transform: translateY(-50%);
 }
 
 .block-left {
-    /* left: -60px;  */
     top: 50%;
     left: -120%;
     transform: translateY(-50%);
-}
+} 
