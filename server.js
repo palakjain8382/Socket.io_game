@@ -75,6 +75,7 @@ socket.on('hostRoom', (playerName) => {
 
     const roomId = generateRoomId(); // Room ID generated here
     const playerId = generatePlayerId();
+
     socket.join(roomId);
 
     // Initialize activeRooms[roomId] as an empty array if it's undefined
@@ -83,7 +84,7 @@ socket.on('hostRoom', (playerName) => {
     }
 
     // Add the host player to the active room
-    activeRooms[roomId].push({ playerId, playerName });
+    activeRooms[roomId].push({playerId, playerName});
 
     // Emit 'roomCreated' event with roomId and playerId
     socket.emit('roomCreated', { roomId, playerId, playerName });

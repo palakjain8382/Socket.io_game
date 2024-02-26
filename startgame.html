@@ -73,9 +73,8 @@ document.addEventListener("DOMContentLoaded", function() {
     // Function to select a random card image filename from the array
     function getRandomCard() {
         var suits = ['c', 'd', 'h', 's'];
-        var randomSuit = suits[Math.floor(Math.random() * suits.length)];
         var randomNumber = Math.floor(Math.random() * 13) + 1;
-        return randomSuit + randomNumber + '.png';
+        return suits[Math.floor(Math.random() * suits.length)] + randomNumber + '.png';
     }
 
     // Function to create and append a card element to the card block
@@ -91,7 +90,10 @@ document.addEventListener("DOMContentLoaded", function() {
     function setRandomCardImages() {
         var cardElements = document.querySelectorAll('.card');
         cardElements.forEach(function(cardElement) {
-            var randomCard = getRandomCard();
+            var randomCard;
+            do {
+                randomCard = getRandomCard();
+            } while (displayedCards.includes(randomCard)); // Ensure the card is not already displayed
             console.log("Randomly picked card:", randomCard); // Print randomly picked card
             cardElement.style.backgroundImage = "url('assets/cards/" + randomCard + "')";
             displayedCards.push(randomCard); // Add displayed card to array

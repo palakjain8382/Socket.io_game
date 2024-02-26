@@ -1,4 +1,3 @@
-room.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,6 +24,8 @@ room.html
             <!-- Player list will be dynamically populated here -->
         </ul>
     </div>
+    <!-- Button for the host to start the game -->
+    <button id="start-game-btn" style="display: none;   margin-left: 60px;">Start Game</button>
 </div>
 <script>
     const socket = io('http://localhost:3000');
@@ -44,11 +45,16 @@ room.html
         playerListElement.innerHTML = '';
 
         // Append each player's name to the list if playerName is defined
-        players.forEach(player => {
+        players.forEach((player, index) => {
             if (player.playerName !== undefined) { // Check if playerName is defined
                 const listItem = document.createElement('li');
                 listItem.textContent = player.playerName;
                 playerListElement.appendChild(listItem);
+            }
+
+            // Show the start game button if the current player is the host
+            if (index === 0) {
+                document.getElementById('start-game-btn').style.display = 'block';
             }
         });
     }
@@ -61,6 +67,14 @@ room.html
 
     // Emit joinRoom event when the page loads
     socket.emit('joinRoom', { roomId });
+
+    // Event listener for the start game button
+    document.getElementById('start-game-btn').addEventListener('click', function() {
+        // Emit a startGame event to the server
+        socket.emit('startGame', roomId);
+        // Redirect to startgame.html
+        window.location.href = 'startgame.html';
+    });
 
 </script>
 </body>
