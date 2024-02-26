@@ -1,0 +1,204 @@
+/* startgame.css */
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden; /* Prevent scrolling */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Make body a relative positioning context */
+}
+
+.bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/Wooden-bg.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: blur(1px);
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%; /* Adjusted to take up 80% of the screen */
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Ensure the container is behind the player list */
+}
+
+.table-container {
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
+
+#table {
+    width: 100%;
+}
+
+.user {
+    position: absolute;
+    width: 140px; /* Adjusted to match the width of the icon */
+    height: 140px; /* Adjusted to match the height of the icon */
+}
+
+.user.user1 {
+    top: 10%;
+    left: 10%;
+    background-image: url('assets/user1.png');
+    background-size: auto; /* Set background size to auto */
+}
+
+.user.user2 {
+    top: 10%;
+    right: 10%;
+    background-image: url('assets/user2.png');
+    background-size: auto; /* Set background size to auto */
+}
+
+.user.user3 {
+    bottom: 10%;
+    left: 10%;
+    background-image: url('assets/user3.png');
+    background-size: auto; /* Set background size to auto */
+}
+
+.user.user4 {
+    bottom: 10%;
+    right: 10%;
+    background-image: url('assets/user4.png');
+    background-size: auto; /* Set background size to auto */
+}
+
+.user-name {
+    position: absolute;
+    bottom: -30px; /* Adjust the distance from the user icon */
+    left: 50%; /* Center the user name */
+    transform: translateX(-50%);
+    font-size: 14px; /* Adjust the font size */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    padding: 5px 10px; /* Adjust padding as needed */
+    color: white;
+    border-radius: 5px; /* Rounded corners */
+}
+
+/* Add this CSS to style the input fields and send icons */
+.player-input {
+    width: 100px; /* Adjust width as needed */
+    padding: 10px; /* Adjust padding as needed */
+    border: 1px solid #ccc; /* Add border */
+    border-radius: 5px; /* Add border-radius */
+}
+
+.send-icon {
+    width: 80px; /* Adjust icon size as needed */
+    height: 30px; /* Adjust icon size as needed */
+    background-image: url('assets/send-icon.png'); /* Add send icon */
+    background-size: cover; /* Ensure icon covers the element */
+    cursor: pointer; /* Add cursor pointer */
+    margin-left: calc(100% - 80px); /* Adjusted position to 10px from the right */
+}
+
+
+.player-list {
+    width: 20%; /* Adjusted to take up 20% of the screen */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+    z-index: 2; /* Ensure the player list is on top */
+}
+
+.player-list h2 {
+    margin-top: 0;
+}
+
+.player-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.player-list ul li {
+    margin-bottom: 10px;
+}
+
+.card-block {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center; /* Center the cards horizontally */
+    align-items: center; /* Center the cards vertically */
+}
+
+.card {
+    width: 60px; /* Adjust size as needed */
+    height: 80px; /* Adjust size as needed */
+    margin: 0 5px; /* Adjust spacing between cards */
+    background-size: cover; /* Ensure the card image covers the entire card element */
+    background-repeat: no-repeat; /* Prevent repeating the card image */
+}
+
+#end-game-btn {
+    position: absolute;
+    top: 0;
+    right: 50px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #e94b2f; /* Tomato color */
+    border: 2px solid #CD5C5C; /* Indian red border */
+    border-radius: 5px;
+    color: #fff; /* White font color */
+    z-index: 4; /* Ensure button is on top */
+}
+
+#start-game-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #9ACD32; /* Pastel green */
+    border: 2px solid #556B2F; /* Dark olive green border */
+    border-radius: 5px;
+    color: #000; /* Black font color */
+    text-shadow: 1px 1px 1px #fff; /* White text shadow */
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5); /* Shadow effect */
+    z-index: 3; /* Ensure button is on top */
+}
+
+
+.block-right,
+.block-left {
+    position: absolute;
+    width: 160px; 
+    height: 100px;
+    /* background-color: rgba(0, 0, 0, 0.3);  */
+}
+
+.block-right {
+    right: -120%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.block-left {
+    top: 50%;
+    left: -120%;
+    transform: translateY(-50%);
+} 
