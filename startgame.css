@@ -43,6 +43,8 @@ body {
     width: 100%;
 }
 
+
+
 .user {
     position: absolute;
     width: 10%; /* Adjusted based on screen size */
@@ -52,35 +54,30 @@ body {
 .user.user1 {
     top: 10%;
     left: 10%;
-    background-image: url('assets/user1.png');
     background-size: contain; /* Adjusted to contain the image */
 }
 
 .user.user2 {
     top: 10%;
     right: 10%;
-    background-image: url('assets/user2.png');
     background-size: contain; /* Adjusted to contain the image */
 }
 
 .user.user3 {
     bottom: 10%;
     left: 10%;
-    background-image: url('assets/user3.png');
     background-size: contain; /* Adjusted to contain the image */
 }
 
 .user.user4 {
     bottom: 10%;
     right: 10%;
-    background-image: url('assets/user4.png');
     background-size: contain; /* Adjusted to contain the image */
 }
 
 .user-name {
     position: absolute;
-    bottom: -30px; /* Adjust the distance from the user icon */
-    left: 50%; /* Center the user name */
+    bottom: 65px; /* Adjust the distance from the user icon */
     transform: translateX(-50%);
     font-size: 14px; /* Adjust the font size */
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
@@ -95,33 +92,18 @@ body {
     padding: 5px; /* Adjusted based on screen size */
     border: 1px solid #ccc; /* Add border */
     border-radius: 5px; /* Add border-radius */
+    flex: 1; /* Take remaining space */
+    margin-right: 10px; /* Adjust spacing between input and send icon */
 }
+
 
 .send-icon {
-    width: 60px; /* Adjusted based on screen size */
-    height: 30px; /* Adjusted based on screen size */
+    width: 80px; /* Adjust size as needed */
+    height: 30px; /* Adjust size as needed */
+    background-image: url('assets/send-icon.png'); /* Set the background image */
     background-size: cover; /* Ensure icon covers the element */
     cursor: pointer; /* Add cursor pointer */
-    margin-left: calc(100% - 60px); /* Adjusted position to 10px from the right */
 }
-
-/* Different colors for send button for each player */
-.user.user1 .send-icon {
-    background-color: #ff0000; /* Red */
-}
-
-.user.user2 .send-icon {
-    background-color: #00ff00; /* Green */
-}
-
-.user.user3 .send-icon {
-    background-color: #0000ff; /* Blue */
-}
-
-.user.user4 .send-icon {
-    background-color: #ffff00; /* Yellow */
-}
-
 .player-list {
     width: 20%; /* Adjusted to take up 20% of the screen */
     padding: 20px;
@@ -148,27 +130,8 @@ body {
     margin-bottom: 10px;
 }
 
-.card-block {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    justify-content: center; /* Center the cards horizontally */
-    align-items: center; /* Center the cards vertically */
-}
-
-.card {
-    width: 60px; /* Adjust size as needed */
-    height: 80px; /* Adjust size as needed */
-    margin: 0 5px; /* Adjust spacing between cards */
-    background-size: cover; /* Ensure the card image covers the entire card element */
-    background-repeat: no-repeat; /* Prevent repeating the card image */
-}
-
 #end-game-btn {
     position: absolute;
-    top: 0;
     right: 50px;
     padding: 10px 20px;
     font-size: 16px;
@@ -180,52 +143,3 @@ body {
     z-index: 4; /* Ensure button is on top */
 }
 
-/* Add this CSS to style the chat icon button */
-/* Add this CSS to style the chat icon button
-.chat-icon-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999; 
-}
-
-#chat-icon-btn {
-    width: 50px; 
-    height: 50px; 
-    background-color: #ffffff;
-    border: none;
-    border-radius: 50%; 
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-}
-*/
-/* #chat-icon-btn img {
-    width: 100%; 
-    height: 100%; 
-    z-index: 100000;
-} */
-.chat-icon-container {
-    position: fixed;
-    bottom: 20px; /* Adjust as needed */
-    right: 20px; /* Adjust as needed */
-    z-index: 9999; /* Ensure it's above other content */
-}
-
-#chat-icon-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-}
-
-.chat-box {
-    position: fixed;
-    bottom: 20px; /* Adjust as needed */
-    right: 20px; /* Adjust as needed */
-    width: 300px; /* Adjust width as needed */
-    height: 400px; /* Adjust height as needed */
-    background-color: #f0f0f0; /* Background color of the chat box */
-    border-radius: 10px; /* Adjust as needed */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Box shadow for a floating effect */
-    z-index: 9998; /* Ensure it's above other content but behind chat icon */
-    display: none; /* Hide by default */
-}

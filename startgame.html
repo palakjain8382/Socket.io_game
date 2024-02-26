@@ -14,7 +14,6 @@
     <div class="table-container">
         <img src="assets/table.png" alt="Table" id="table">
         <div class="user user1">
-            <div class="user-icon"></div>
             <div class="user-name">Player 1</div>
             <div class="block-right">
                 <input type="text" class="player-input" placeholder="Enter text">
@@ -22,7 +21,6 @@
             </div> <!-- Right block area for user 1 -->
         </div>
         <div class="user user2">
-            <div class="user-icon"></div>
             <div class="user-name">Player 2</div>
             <div class="block-left">
                 <input type="text" class="player-input" placeholder="Enter text">
@@ -30,7 +28,6 @@
             </div> <!-- Left block area for user 2 -->
         </div>
         <div class="user user3">
-            <div class="user-icon"></div>
             <div class="user-name">Player 3</div>
             <div class="block-right">
                 <input type="text" class="player-input" placeholder="Enter text">
@@ -38,7 +35,6 @@
             </div> <!-- Right block area for user 3 -->
         </div>
         <div class="user user4">
-            <div class="user-icon"></div>
             <div class="user-name">Player 4</div>
             <div class="block-left">
                 <input type="text" class="player-input" placeholder="Enter text">
@@ -46,9 +42,6 @@
             </div> <!-- Left block area for user 4 -->
         </div>
 
-        <!-- Add a container for card elements -->
-        <div class="card-block">
-        </div>
         <!-- Add the end game button -->
         <button id="end-game-btn">End Game</button>
     </div>
@@ -65,74 +58,8 @@
     </ul>
 </div>
 
-
-<div class="chat-icon-container">
-    <button id="chat-icon-btn"><img src="assets/chat-icon.png" alt="Chat Icon"></button>
-</div>
-
 <script>
 var playerMessages = {}; // Global object to store player messages
-
-document.getElementById("chat-icon-btn").addEventListener("click", function() {
-    var chatBox = document.getElementById("chat-box");
-    chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
-
-    if (chatBox.style.display === "block") {
-        populateChatBox();
-    }
-});
-
-function populateChatBox() {
-    var chatBox = document.getElementById("chat-box");
-    chatBox.innerHTML = ""; // Clear previous content
-    
-    // Loop through the messages and append them to the chat box
-    playersMessages.forEach(function(message) {
-        var chatMessage = document.createElement("div");
-        chatMessage.innerText = message.sender + ": " + message.message;
-        chatBox.appendChild(chatMessage);
-    });
-}
-
-
-document.addEventListener("DOMContentLoaded", function() {
-    var displayedCards = []; // Array to keep track of displayed cards
-
-    // Function to select a random card image filename from the array
-    function getRandomCard() {
-        var suits = ['c', 'd', 'h', 's'];
-        var randomNumber = Math.floor(Math.random() * 13) + 1;
-        return suits[Math.floor(Math.random() * suits.length)] + randomNumber + '.png';
-    }
-
-    // Function to create and append a card element to the card block
-    function createCardElement() {
-        console.log("Creating card element...");
-        var cardElement = document.createElement('div');
-        cardElement.classList.add('card');
-        document.querySelector('.card-block').appendChild(cardElement);
-        return cardElement;
-    }
-
-    // Function to set a random card image to each card element
-    function setRandomCardImages() {
-        var cardElements = document.querySelectorAll('.card');
-        cardElements.forEach(function(cardElement) {
-            var randomCard;
-            do {
-                randomCard = getRandomCard();
-            } while (displayedCards.includes(randomCard)); // Ensure the card is not already displayed
-            console.log("Randomly picked card:", randomCard); // Print randomly picked card
-            cardElement.style.backgroundImage = "url('assets/cards/" + randomCard + "')";
-            displayedCards.push(randomCard); // Add displayed card to array
-        });
-    }
-
-    // Create new card elements and display them when the page loads
-    for (var i = 0; i < 3; i++) {
-        createCardElement();
-    }
-    setRandomCardImages();
 
     // Always show the End Game button
     document.getElementById('end-game-btn').style.display = 'block';
@@ -161,7 +88,6 @@ document.addEventListener("DOMContentLoaded", function() {
             playerList.appendChild(messageItem);
         });
     });
-});
 
 </script>
 </body>
