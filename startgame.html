@@ -48,7 +48,6 @@
 
         <!-- Add a container for card elements -->
         <div class="card-block">
-            <!-- Card elements will be added here dynamically -->
         </div>
         <!-- Add the end game button -->
         <button id="end-game-btn">End Game</button>
@@ -57,16 +56,45 @@
 
 
 <div class="player-list">
-    <h2>Players in Room</h2>
-    <ul>
-        <li>Player 1</li>
+    <h2>Player Moves</h2>
+     <ul>
+        <!-- <li>Player 1</li>
         <li>Player 2</li>
         <li>Player 3</li>
-        <li>Player 4</li>
+        <li>Player 4</li> -->
     </ul>
 </div>
 
+
+<div class="chat-icon-container">
+    <button id="chat-icon-btn"><img src="assets/chat-icon.png" alt="Chat Icon"></button>
+</div>
+
 <script>
+var playerMessages = {}; // Global object to store player messages
+
+document.getElementById("chat-icon-btn").addEventListener("click", function() {
+    var chatBox = document.getElementById("chat-box");
+    chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
+
+    if (chatBox.style.display === "block") {
+        populateChatBox();
+    }
+});
+
+function populateChatBox() {
+    var chatBox = document.getElementById("chat-box");
+    chatBox.innerHTML = ""; // Clear previous content
+    
+    // Loop through the messages and append them to the chat box
+    playersMessages.forEach(function(message) {
+        var chatMessage = document.createElement("div");
+        chatMessage.innerText = message.sender + ": " + message.message;
+        chatBox.appendChild(chatMessage);
+    });
+}
+
+
 document.addEventListener("DOMContentLoaded", function() {
     var displayedCards = []; // Array to keep track of displayed cards
 
@@ -116,7 +144,25 @@ document.addEventListener("DOMContentLoaded", function() {
         document.querySelector('.card-block').innerHTML = '';
         displayedCards = []; // Reset displayed cards array
     });
+
+    // Event listener for send icon clicks
+    var sendIcons = document.querySelectorAll('.send-icon');
+    sendIcons.forEach(function(sendIcon, index) {
+        sendIcon.addEventListener('click', function() {
+            var inputValue = document.querySelectorAll('.player-input')[index].value;
+            var playerName = document.querySelectorAll('.user-name')[index].textContent;
+            playerMessages[playerName] = inputValue; // Update global object with player's message
+            // console.log("Updated player messages:", playerMessages);
+            
+            // Update player list with response
+            var playerList = document.querySelector('.player-list ul');
+            var messageItem = document.createElement('li');
+            messageItem.textContent = playerName + ": " + inputValue;
+            playerList.appendChild(messageItem);
+        });
+    });
 });
+
 </script>
 </body>
 </html>
