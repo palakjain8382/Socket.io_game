@@ -73,9 +73,14 @@
         // Emit a startGame event to the server
         socket.emit('startGame', roomId);
         // Redirect to startgame.html
-        window.location.href = 'startgame.html';
+        // window.location.href = `startgame.html?${roomId}`;
     });
 
+// Listen for redirectToStartGame event
+socket.on('redirectToStartGame', () => {
+        // Redirect to startgame.html
+        window.location.href = `startgame.html?roomId=${roomId}`;
+    });
 </script>
 </body>
 </html>

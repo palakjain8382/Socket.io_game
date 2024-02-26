@@ -97,6 +97,11 @@ socket.on('hostRoom', (playerName) => {
 });
 
 
+// Listen for startGame event
+socket.on('startGame', (roomId) => {
+    // Broadcast redirectToStartGame event to all clients in the room
+    io.to(roomId).emit('redirectToStartGame');
+});
 
 // Join a room
     socket.on('joinRoom', ({roomId, playerName}) => {
@@ -165,6 +170,7 @@ socket.on('hostRoom', (playerName) => {
 //     }
 
 // }
+
 
 // Start the server
 server.listen(PORT, () => {
