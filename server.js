@@ -79,7 +79,22 @@ socket.on('fetchPlayersList', (roomId) => {
         console.log(`Room with ID ${roomId} does not exist.`);
     }
 });
+socket.on('error', (error) => {
+    console.error('Socket error:', error);
+});
 
+// Listen for playerMessage event
+socket.on('playerMessage', ({ roomId, playerName, message }) => {
+    if (activeRooms[roomId]) {
+        // Add the message to the active room's playerChats
+        activeRooms[roomId].playerChats.push({ playerName, message });
+
+        // Emit updated player chats to all clients in the room
+        io.to(roomId).emit('updatePlayerChats', activeRooms[roomId].playerChats);
+    } else {
+        console.log(`Room with ID ${roomId} does not exist.`);
+    }
+});
 
 
 

@@ -51,22 +51,22 @@
 
 <div class="player-list">
     <h2>Player Moves</h2>
-     <ul>
-        <!-- <li>Player 1</li>
-        <li>Player 2</li>
-        <li>Player 3</li>
-        <li>Player 4</li> -->
+     <ul id="player-names-list">
+        <!-- List items will be added dynamically here -->
+    </ul>
+    <ul id="player-chats-list">
+        <!-- Messages will be added dynamically here -->
     </ul>
 </div>
 
 <script>
     const socket = io('http://localhost:3000');
 
-// Extract room ID from URL parameters
-const urlParams = new URLSearchParams(window.location.search);
-const roomId = urlParams.get('roomId');
+    // Extract room ID from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get('roomId');
 
-var playerMessages = {}; // Global object to store player messages
+    var playerMessages = {}; // Global object to store player messages
 
     // Always show the End Game button
     document.getElementById('end-game-btn').style.display = 'block';
@@ -78,33 +78,71 @@ var playerMessages = {}; // Global object to store player messages
 
     // Event listener for send icon clicks
     var sendIcons = document.querySelectorAll('.send-icon');
+
+    // Event listener for send icon clicks
     sendIcons.forEach(function(sendIcon, index) {
         sendIcon.addEventListener('click', function() {
-            var inputValue = document.querySelectorAll('.player-input')[index].value;
+            var inputValue = document.querySelectorAll('.player-input')[index].value.trim(); // Trim whitespace from the input value
             var playerName = document.querySelectorAll('.user-name')[index].textContent;
-            playerMessages[playerName] = inputValue; // Update global object with player's message
-            // console.log("Updated player messages:", playerMessages);
-            
-            // Update player list with response
-            var playerList = document.querySelector('.player-list ul');
-            var messageItem = document.createElement('li');
-            messageItem.textContent = playerName + ": " + inputValue;
-            playerList.appendChild(messageItem);
 
-            document.querySelectorAll('.player-input')[index].value = ""; // Reset input value to empty string
+            // Check if the input value is not blank
+            if (inputValue !== "") {
+                playerMessages[playerName] = inputValue; // Update global object with player's message
+                
+                // Update player list with response
+                // var playerList = document.querySelector('.player-list ul');
+                // var messageItem = document.createElement('li');
+                // messageItem.textContent = playerName + ": " + inputValue;
+                // playerList.appendChild(messageItem);
+
+                document.querySelectorAll('.player-input')[index].value = ""; // Reset input value to empty string
+
+                // Emit the message to the server to add to the active room's player chats
+                socket.emit('playerMessage', { roomId: roomId, playerName: playerName, message: inputValue });
+            } else {
+                // Display an error message or handle the empty message case
+                console.log("Please enter a non-empty message.");
+            }
         });
     });
 
-// Emit 'fetchPlayersList' event after setting up the listener
-socket.on('connect', () => {
-    socket.emit('fetchPlayersList', roomId);
-});
+    // Listen for updatePlayerChats event
+    socket.on('updatePlayerChats', (playerChats) => {
+        console.log('Updated Player Chats:', playerChats);
+        // Update the UI with the updated player chats
+        const playerChatsList = document.getElementById('player-chats-list');
+        // Clear existing messages
+        playerChatsList.innerHTML = '';
+        playerChats.forEach(chat => {
+            const chatItem = document.createElement('li');
+            chatItem.textContent = chat.playerName + ": " + chat.message;
+            playerChatsList.appendChild(chatItem);
+        });
+    });
 
-socket.on('sendPlayersList', (data) => {
-    console.log('Players List:', data);
-});
+    // Emit 'fetchPlayersList' event after setting up the listener
+    socket.on('connect', () => {
+        socket.emit('fetchPlayersList', roomId);
+    });
 
+    // Listen for the updated player list
+    socket.on('sendPlayersList', (playersList) => {
+        console.log('Players List:', playersList);
+        const playerNamesList = document.getElementById('player-names-list');
+        playerNamesList.innerHTML = ''; // Clear previous list items
+        playersList.forEach((player, index) => {
+            if (index % 2 !== 0) { // Only add names of odd players
+                const playerName = player.playerName;
+                const listItem = document.createElement('li');
+                listItem.textContent = playerName;
+                playerNamesList.appendChild(listItem);
+            }
+        });
+    });
 
+    // Emit 'joinRoom' event
+    socket.emit('joinRoom', { roomId });
 </script>
+
 </body>
 </html>
