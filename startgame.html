@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Game</title>
+    <link rel="stylesheet" type="text/css" href="startgame.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+</head>
+<body>
+
+<div class="bg-image"></div>
+
+<div class="container">
+    <div class="table-container">
+        <img src="assets/table.png" alt="Table" id="table">
+        <div class="user user1">
+            <div class="user-name">Player 1</div>
+            <div class="block-right">
+                <input type="text" class="player-input" placeholder="Enter text">
+                <div class="send-icon"></div> <!-- Icon to send value -->
+            </div> <!-- Right block area for user 1 -->
+        </div>
+        <div class="user user2">
+            <div class="user-name">Player 2</div>
+            <div class="block-left">
+                <input type="text" class="player-input" placeholder="Enter text">
+                <div class="send-icon"></div> <!-- Icon to send value -->
+            </div> <!-- Left block area for user 2 -->
+        </div>
+        <div class="user user3">
+            <div class="user-name">Player 3</div>
+            <div class="block-right">
+                <input type="text" class="player-input" placeholder="Enter text">
+                <div class="send-icon"></div> <!-- Icon to send value -->
+            </div> <!-- Right block area for user 3 -->
+        </div>
+        <div class="user user4">
+            <div class="user-name">Player 4</div>
+            <div class="block-left">
+                <input type="text" class="player-input" placeholder="Enter text">
+                <div class="send-icon"></div> <!-- Icon to send value -->
+            </div> <!-- Left block area for user 4 -->
+        </div>
+
+        <!-- Add the end game button -->
+        <button id="end-game-btn">End Game</button>
+    </div>
+</div>
+
+
+<div class="player-list">
+    <h2>Player Moves</h2>
+     <ul>
+        <!-- <li>Player 1</li>
+        <li>Player 2</li>
+        <li>Player 3</li>
+        <li>Player 4</li> -->
+    </ul>
+</div>
+
+<script>
+    const socket = io('http://localhost:3000');
+
+// Extract room ID from URL parameters
+const urlParams = new URLSearchParams(window.location.search);
+const roomId = urlParams.get('roomId');
+
+var playerMessages = {}; // Global object to store player messages
+
+    // Always show the End Game button
+    document.getElementById('end-game-btn').style.display = 'block';
+
+    // Event listener for the End Game button
+    document.getElementById('end-game-btn').addEventListener('click', function() {
+        console.log("End game button clicked.");
+    });
+
+    // Event listener for send icon clicks
+    var sendIcons = document.querySelectorAll('.send-icon');
+    sendIcons.forEach(function(sendIcon, index) {
+        sendIcon.addEventListener('click', function() {
+            var inputValue = document.querySelectorAll('.player-input')[index].value;
+            var playerName = document.querySelectorAll('.user-name')[index].textContent;
+            playerMessages[playerName] = inputValue; // Update global object with player's message
+            // console.log("Updated player messages:", playerMessages);
+            
+            // Update player list with response
+            var playerList = document.querySelector('.player-list ul');
+            var messageItem = document.createElement('li');
+            messageItem.textContent = playerName + ": " + inputValue;
+            playerList.appendChild(messageItem);
+
+            document.querySelectorAll('.player-input')[index].value = ""; // Reset input value to empty string
+        });
+    });
+
+// Emit 'fetchPlayersList' event after setting up the listener
+socket.on('connect', () => {
+    socket.emit('fetchPlayersList', roomId);
+});
+
+socket.on('sendPlayersList', (data) => {
+    console.log('Players List:', data);
+});
+
+
+</script>
+</body>
+</html>

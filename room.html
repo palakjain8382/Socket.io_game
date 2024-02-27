@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Room</title>
+    <style>
+        body {
+            color: white; /* Set text color to white */
+        }
+    </style>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"></script>
+</head>
+<body>
+<div class="bg-image"></div>
+<div class="container">
+    <h1>Room Details</h1> <!-- Heading -->
+
+    <div id="roomDetails">
+        <p>Room ID: <span id="roomId"></span></p>
+        <h2>Players in the Room</h2>
+        <ul id="playerList">
+            <!-- Player list will be dynamically populated here -->
+        </ul>
+    </div>
+    <!-- Button for the host to start the game -->
+    <button id="start-game-btn" style="display: none;   margin-left: 60px;">Start Game</button>
+</div>
+<script>
+    const socket = io('http://localhost:3000');
+
+    // Extract room ID from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get('roomId');
+
+    // Update room details on the screen
+    document.getElementById('roomId').textContent = roomId;
+
+    // Function to update player list on the screen
+    function updatePlayerList(players) {
+        const playerListElement = document.getElementById('playerList');
+
+        // Clear existing player list
+        playerListElement.innerHTML = '';
+
+        // Append each player's name to the list if playerName is defined
+        players.forEach((player, index) => {
+            if (player.playerName !== undefined) { // Check if playerName is defined
+                const listItem = document.createElement('li');
+                listItem.textContent = player.playerName;
+                playerListElement.appendChild(listItem);
+            }
+
+            // Show the start game button if the current player is the host
+            if (index === 0) {
+                document.getElementById('start-game-btn').style.display = 'block';
+            }
+        });
+    }
+
+    // Listen for updatePlayerList event
+    socket.on('updatePlayerList', (data) => {
+        // Update the player list on the client page
+        updatePlayerList(data);
+    });
+
+    // Emit joinRoom event when the page loads
+    socket.emit('joinRoom', { roomId });
+
+    // Event listener for the start game button
+    document.getElementById('start-game-btn').addEventListener('click', function() {
+        // Emit a startGame event to the server
+        socket.emit('startGame', roomId);
+        // Redirect to startgame.html
+        // window.location.href = `startgame.html?${roomId}`;
+    });
+
+// Listen for redirectToStartGame event
+socket.on('redirectToStartGame', () => {
+        // Redirect to startgame.html
+        window.location.href = `startgame.html?roomId=${roomId}`;
+    });
+</script>
+</body>
+</html>
