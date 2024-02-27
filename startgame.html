@@ -108,8 +108,6 @@
 
     // Listen for updatePlayerChats event
     socket.on('updatePlayerChats', (playerChats) => {
-        console.log('Updated Player Chats:', playerChats);
-        // Update the UI with the updated player chats
         const playerChatsList = document.getElementById('player-chats-list');
         // Clear existing messages
         playerChatsList.innerHTML = '';
@@ -125,20 +123,57 @@
         socket.emit('fetchPlayersList', roomId);
     });
 
-    // Listen for the updated player list
-    socket.on('sendPlayersList', (playersList) => {
-        console.log('Players List:', playersList);
-        const playerNamesList = document.getElementById('player-names-list');
-        playerNamesList.innerHTML = ''; // Clear previous list items
-        playersList.forEach((player, index) => {
-            if (index % 2 !== 0) { // Only add names of odd players
-                const playerName = player.playerName;
-                const listItem = document.createElement('li');
-                listItem.textContent = playerName;
-                playerNamesList.appendChild(listItem);
-            }
-        });
+//   // Listen for the updated player list
+// socket.on('sendPlayersList', (playersList) => {
+//     // console.log('Players List:', playersList);
+
+//     // Initialize last assigned name
+//     let lastAssignedName = '';
+    
+//     // Remove unwanted objects
+//     playersList = playersList.filter(player => player.playerName);
+
+//     playersList.forEach((player, index) => {
+//         // If player name is blank, set it to the last assigned name
+//         if (!player.playerName && lastAssignedName !== '') {
+//             player.playerName = lastAssignedName;
+//         }
+//         if (player.playerName) {
+//             // Update last assigned name
+//             lastAssignedName = player.playerName;
+//         }
+//     });
+
+//     // Filter out null or undefined player names
+//     const definedPlayerNames = playersList.filter(player => player.playerName);
+//     // console.log('Defined Player Names:', definedPlayerNames);
+
+//     // Update player names on the screen
+//     const userNames = document.querySelectorAll('.user-name');
+//     definedPlayerNames.forEach((player, index) => {
+//         userNames[index].textContent = player.playerName;
+//     });
+// });
+ // Listen for the updated player list
+ socket.on('sendPlayersList', (playersList) => {
+    // Initialize last assigned name
+    let lastAssignedName = '';
+    
+    // Remove unwanted objects and limit the number of players to a maximum of 4
+    playersList = playersList.filter((player, index) => index < 4 && player.playerName);
+
+    // Update player names on the screen
+    const userNames = document.querySelectorAll('.user-name');
+    userNames.forEach((userName, index) => {
+        if (playersList[index]) {
+            userName.textContent = playersList[index].playerName;
+            userName.parentElement.style.display = 'block'; // Show the player element
+        } else {
+            userName.parentElement.style.display = 'none'; // Hide the player element if no player exists
+        }
     });
+});
+
 
     // Emit 'joinRoom' event
     socket.emit('joinRoom', { roomId });
