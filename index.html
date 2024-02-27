@@ -61,17 +61,10 @@
     }
 
     // Function to start the game
-         // Function to start the game
     function startGame() {
-        showNamePopup();
-
-        // Define the dummy player object
-        const dummyPlayer = 'CPU Player';
-
-        socket.emit('joinRoom', { roomId, dummyPlayer });
-
-        // Call the function to display the dummy player when needed
-        displayDummyPlayer();
+        // Handle starting the game here...
+        // For example, redirect to the next page
+        window.location.href = 'startgame.html';
     }
 
     // Function to join a friend's room
@@ -97,7 +90,6 @@
         const url = `room.html?roomId=${roomId}&playerName=${playerName}`; // Construct the URL with roomId and playerName parameters
         window.location.href = url; // Redirect to the room.html page with parameters
     }
-
 
     // Function to host a room
     function hostRoom() {
